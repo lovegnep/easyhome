@@ -186,4 +186,8 @@ let server81 = new server(81);
 server81.listen();
 let server21001 = new server(21001);
 server21001.listen();
+setInterval(function(){
+    let localID = [...clients.keys()];
+    Logger.debug('当前远程客户端数量：',localID.length, localID);
+},10000);
 

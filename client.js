@@ -129,3 +129,7 @@ function init(){
     });
 }
 init();
+setInterval(function(){
+    let localID = [...localClients.keys()];
+    Logger.debug('当前远程客户端与本地客户端数量：',localID.length, localID);
+},10000);
