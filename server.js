@@ -73,7 +73,7 @@ masterServer.prototype.listen = function(){
         Logger.info('server listen %d success.',self.port);
     });
     this.server = ser;
-}
+};
 masterServer.prototype.send = function(buf, sourceid){
     this.client.write(buf, sourceid);
 };
@@ -99,6 +99,14 @@ client.prototype.closecb = function(){
         master.send(null, this.id);
     }
     clients.delete(this.id)
+};
+client.prototype.timeoutclosecb = function(){
+    Logger.debug('远程客户端超时关闭close socket:',this.id);
+    if(master.client){
+        master.send(null, this.id);
+    }
+    this.socket.destroy();
+    clients.delete(this.id);
 };
 client.prototype.write = function(msg, id){
     if(!msg){
@@ -136,7 +144,7 @@ client.prototype.write = function(msg, id){
 client.prototype.processmsg = function(msghead,msgbuf){
     let client = clients.get(msghead.clientid);
     if(!client){
-        Logger.error('client.prototype.processmsg: !clent');
+        Logger.error('没能找到远程客户端，也许已经关闭了。',msghead.cliendid);
         return;
     }
     Logger.debug('send msg to remote client.',msghead,msgbuf.length);
@@ -152,14 +160,18 @@ server.prototype.listen = function(){
     let self = this;
     let ser = Net.createServer(function(socket){
         Logger.debug('client com.',{localAddress:socket.localAddress, localPort:socket.localPort,remoteAddress:socket.remoteAddress,remotePort:socket.remotePort});
+        socket.setNoDelay(true);
+        socket.setKeepAlive(true,10000);
+        socket.setTimeout(60000);
+
         if(!master.client){
             return socket.destroy();
         }
         let newclient = new client(socket);
         clients.set(newclient.id, newclient);
-        self.clients.push(newclient);
+        socket.on('timeout',newclient.timeoutclosecb.bind(newclient));
         socket.on('error',function(err){
-            Logger.error('socket error.',err);
+            Logger.error('远程客户端error.',err);
         });
         socket.on('close',newclient.closecb.bind(newclient));
         socket.on('data',newclient.datacb.bind(newclient));
