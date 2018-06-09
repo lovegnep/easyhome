@@ -46,7 +46,7 @@ function masterServer(port){
         offsite+=data.length;
         Logger.debug('offsite:%d, data.length:%d',offsite, data.length);
         if(offsite >= MsgType.Consts.headSize){
-            let bufhead = buf.slice(0,headSize);
+            let bufhead = buf.slice(0,MsgType.Consts.headSize);
             let msghead = MsgType.getHead(bufhead);
             Logger.debug('masterServer: inside client come data:',msghead, offsite);
             while(offsite >= MsgType.Consts.headSize+msghead.msglen){
