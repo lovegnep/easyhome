@@ -18,3 +18,4 @@ exports = {
         }
     ]
 };
+Object.assign(module.exports, exports);
