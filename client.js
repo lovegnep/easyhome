@@ -27,7 +27,7 @@ localSocket.prototype.datacb = function(data){//本地socket来数据
 localSocket.prototype.closecb = function(){//本地socket来数据
     let buf = new Buffer(MsgType.Consts.headSize);
     MsgType.setRemoveHead(buf, this.sourceid);
-    masterclient.write(buf.slice(0,8));
+    masterclient.write(buf);
 };
 
 function init(){
