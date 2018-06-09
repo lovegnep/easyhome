@@ -31,4 +31,5 @@ If you want connect other port in LAN, just edit the *config.js*, and if you wan
 
 **How did it work**
 ---
-comming soon...
+
+![flow](https://www.5min8.com/other/proxyTool_EN.png)
