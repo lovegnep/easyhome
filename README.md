@@ -20,6 +20,11 @@ For example, a service runs on port 3389(as you know, it is the remote desktop p
 
 3. you can control the pc in the local area network by any other pc with the addr:39.189.54.122:3389
 
+**tips**
+---
+If you want connect other port in LAN, just edit the *config.js*, and if you want connect other ip address in LAN, just edit the *localAddr of client.js*
+
 
 **How did it work**
 ---
+comming soon...
