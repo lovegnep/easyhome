@@ -8,15 +8,19 @@ For example, a service runs on port 3389(as you know, it is the remote desktop p
 
 1. download the project to your vps, and type follows:
 
-    npm install log4js
 
-    node server.js
+    	npm install log4js
+
+    	node server.js
+
 
 2. download the project to the pc in the local area network, and type follows:
 
-    npm install log4js
 
-    node client.js
+    	npm install log4js
+
+    	node client.js
+
 
 3. you can control the pc in the local area network by any other pc with the addr:39.189.54.122:3389
 
