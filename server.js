@@ -9,7 +9,7 @@ let masterClient = null;//主客户端，家里的电脑
 function processMsgFromLocalClient(msgHead, msgBuf){
     let client = clients.get(msgHead.clientid);
     if(!client){
-        Logger.error('没能找到远程客户端，也许已经关闭了。',msgHead.cliendid);
+        Logger.error('没能找到远程客户端，也许已经关闭了。',msgHead.clientid);
         return;
     }
     if(msgHead.cmd === MsgType.MsgType.remove){
@@ -149,6 +149,7 @@ server.prototype.listen = function(){
         }
         let newclient = new client(socket, self.port);
         clients.set(newclient.id, newclient);
+        Logger.debug('成功建立远程客户端映射',newclient.id);
         socket.on('timeout',newclient.timeoutclosecb.bind(newclient));
         socket.on('error',function(err){
             Logger.error('远程客户端error.',err);

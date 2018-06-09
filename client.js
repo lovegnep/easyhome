@@ -51,7 +51,7 @@ function init(){
                     if(loccl){
                         loccl.socket.destroy();
                         localClients.delete(msghead.clientid);
-                        Logger.debug('destroy local socket', msghead.clientid);
+                        Logger.debug('远程客户端关闭则destroy local socket', msghead.clientid);
                     }
                     let tmpbuf = new Buffer(MsgType.Consts.BufSize);
                     tmpbuf.fill(0,0,MsgType.Consts.BufSize);
