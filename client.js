@@ -5,7 +5,7 @@ const MsgType = require('./common/msgtype');
 const localPort = 21001;
 const localAddr = '192.168.31.169';
 const remotePort = 22000;
-const remoteAddr = '47.105.36.1';
+const remoteAddr = '47.15.76.1';
 
 let localClients = new Map();//  id ===>  localsocket
 let masterclient = null;
