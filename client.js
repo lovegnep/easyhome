@@ -65,7 +65,7 @@ function init(){
         function processmsg(){
             if(offsite >= MsgType.Consts.headSize){
                 let msghead = MsgType.getHead(buf.slice(0,MsgType.Consts.headSize));
-                Logger.debug('masterclient:on data',msghead);
+                Logger.debug('masterclient:on data1',msghead,offsite);
                 if(msghead.cmd === 1){//说明远程某个客户端关闭了,要关闭本地的
                     let loccl = localClients.get(msghead.clientid);
                     if(loccl){
@@ -81,7 +81,7 @@ function init(){
                     return processmsg();
                 }
                 if(offsite >= MsgType.Consts.headSize+msghead.msglen){
-                    Logger.debug('masterclient on data:',msghead);
+                    Logger.debug('masterclient on data2:',msghead,offsite);
                     let loccl = localClients.get(msghead.clientid);
                     if(loccl){
                         loccl.socket.write(buf.slice(MsgType.Consts.headSize,MsgType.Consts.headSize+msghead.msglen));
