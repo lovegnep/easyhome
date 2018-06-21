@@ -30,6 +30,22 @@ localSocket.prototype.closecb = function(){//本地socket来数据
     masterclient.write(buf);
 };
 
+function reload(){
+    let keys = [...localClients.keys()];
+    keys.forEach(function(key){
+        let client = localClients.get(key);
+        if(client){
+            client.socket.destroy();
+            client.closecb();
+            localClients.delete(key);
+        }
+    });
+    masterclient.destroy();
+    masterclient = null;
+    Logger.debug('client will retry connect to server after 5s.');
+    setTimeout(init,5000);
+}
+
 function init(){
     masterclient = new Net.Socket();
     masterclient.connect({host:remoteAddr,port:remotePort},function(){
@@ -39,7 +55,11 @@ function init(){
     buf.fill(0,0,MsgType.Consts.BufSize);
     let offsite = 0;
     masterclient.on('data',function(data){
-        Logger.debug('masterclient receive server data:',data.length);
+        Logger.debug('masterclient receive server data:',data.length, offsite);
+        if(offsite + data.length >= MsgType.Consts.BufSize){
+            Logger.info('error will happen.reload client.',buf);
+            return reload();
+        }
         data.copy(buf,offsite);
         offsite += data.length;
         function processmsg(){
@@ -90,6 +110,7 @@ function init(){
                         socket.on('close', tmplo.closecb.bind(tmplo));
                         socket.on('error',function(err){
                             Logger.error('local client err:',err);
+                            tmplo.closecb.call(tmplo)
                         });
                     }
 
