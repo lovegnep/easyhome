@@ -5,7 +5,7 @@ const MsgType = require('./common/msgtype');
 const localPort = 21001;
 const localAddr = '192.168.31.169';
 const remotePort = 22000;
-const remoteAddr = '47.15.76.1';
+const remoteAddr = '47.105.36.1';
 
 let localClients = new Map();//  id ===>  localsocket
 let masterclient = null;
@@ -78,6 +78,7 @@ function init(){
                     buf.copy(tmpbuf,0,MsgType.Consts.headSize);
                     buf = tmpbuf;
                     offsite -= MsgType.Consts.headSize;
+                    Logger.debug('offsite1:',offsite+MsgType.Consts.headSize, -MsgType.Consts.headSize, offsite);
                     return processmsg();
                 }
                 if(offsite >= MsgType.Consts.headSize+msghead.msglen){
@@ -90,7 +91,7 @@ function init(){
                         buf.copy(tmpbuf,0,MsgType.Consts.headSize+msghead.msglen);
                         buf = tmpbuf;
                         offsite -= (MsgType.Consts.headSize+msghead.msglen);
-                        Logger.debug('masterclient on data:init offsite1:',offsite)
+                        Logger.debug('offsite2:',offsite+MsgType.Consts.headSize+msghead.msglen, -(MsgType.Consts.headSize+msghead.msglen), offsite);
                         processmsg();
                     }else{
                         let socket = new Net.Socket();
@@ -98,12 +99,13 @@ function init(){
                         localClients.set(msghead.clientid, tmplo);
                         socket.connect({host:localAddr,port:msghead.port},function(){
                             Logger.info('tmp socket connect success.');
-                            socket.write(buf.slice(MsgType.Consts.headSize,MsgType.Consts.headSize+msghead.msglen));
+                            /*socket.write(buf.slice(MsgType.Consts.headSize,MsgType.Consts.headSize+msghead.msglen));
                             let tmpbuf = new Buffer(MsgType.Consts.BufSize);
                             tmpbuf.fill(0,0,MsgType.Consts.BufSize);
                             buf.copy(tmpbuf,0,MsgType.Consts.headSize+msghead.msglen);
                             buf = tmpbuf;
                             offsite -= (MsgType.Consts.headSize+msghead.msglen);
+                            Logger.debug('offsite3:',offsite+MsgType.Consts.headSize+msghead.msglen, -(MsgType.Consts.headSize+msghead.msglen), offsite);*/
                             processmsg();
                         });
                         socket.on('data', tmplo.datacb.bind(tmplo));
